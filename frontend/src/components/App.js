@@ -11,9 +11,21 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <NavCategories />
-                <ListPosts />
+            <div className="ui container">
+                <br />
+                <br />
+                <br />
+                <br />
+                <h1 className="ui header center">READABLE</h1>
+
+                <div className="ui grid">
+                    <div className="four wide column">
+                        <NavCategories/>
+                    </div>
+                    <div className="twelve wide column">
+                        <ListPosts/>
+                    </div>
+                </div>
             </div>
         );
     }

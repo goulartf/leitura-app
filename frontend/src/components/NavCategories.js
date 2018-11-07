@@ -8,22 +8,29 @@ class NavCategories extends Component {
         const {categories} = this.props;
 
         return (
-            <div>
-                Categorias:
-                <ul>
+
+            <div className="ui vertical menu">
+                <a className="active teal item" key={'all'}>
+                    All categories
+                </a>
                 {categories.map((category) => (
-                    <li key={category.name}>
+                    <a className="item" key={category.name}>
                         {category.name}
-                    </li>
+                    </a>
                 ))}
-                </ul>
+                <div className="item">
+                    <div className="ui transparent icon input">
+                        <input type="text" placeholder="Search..."/>
+                        <i className="search icon"/>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
 
-function mapStateToProps ({ categories }) {
+function mapStateToProps({categories}) {
     return {
         categories: Object.keys(categories).map(category => categories[category])
     }
