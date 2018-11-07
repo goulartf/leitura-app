@@ -9,7 +9,7 @@ class ListPosts extends Component {
         return (
             <div className="ui two stackable cards">
                 {this.props.postsIds.map((id) => (
-                    <Post id={id}/>
+                    <Post id={id} key={id} />
                 ))}
             </div>
         );

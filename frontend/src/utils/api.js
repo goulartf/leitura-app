@@ -30,6 +30,16 @@ const _getPosts = () =>
             return postsNormalized.entities.posts;
         });
 
+const _saveVotePost = (info) =>
+    fetch(`${api}/posts/${info.id}`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({vote: info.vote})
+    }).then(res => res.json());
+
 export function getInitialData() {
     return Promise.all([
         _getCategories(),
@@ -40,17 +50,11 @@ export function getInitialData() {
     }))
 }
 
+export function saveVotePost(info) {
+    return _saveVotePost(info);
+}
 
-// export const update = (book, shelf) =>
-//     fetch(`${api}/books/${book.id}`, {
-//         method: 'PUT',
-//         headers: {
-//             ...headers,
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ shelf })
-//     }).then(res => res.json())
-//
+
 // export const search = (query) =>
 //     fetch(`${api}/search`, {
 //         method: 'POST',
