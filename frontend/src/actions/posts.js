@@ -24,9 +24,9 @@ export function handleVotePost(info) {
         dispatch(votePost(info));
         return API.saveVotePost(info)
             .catch((e) => {
-                console.warn('Error in handleToggleTweet: ', e)
+                console.warn('Error in HandleVote: ', e)
                 dispatch(votePost(info))
-                alert('The was an error liking the tweet. Try again.')
+                alert('The was an error voting the post. Try again.')
             })
     }
 }

@@ -37,7 +37,7 @@ const _saveVotePost = (info) =>
             ...headers,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({vote: info.vote})
+        body: JSON.stringify({option: info.vote})
     }).then(res => res.json());
 
 export function getInitialData() {
