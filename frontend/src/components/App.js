@@ -1,32 +1,38 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {handleInitialData} from '../actions/shared'
+import NewPost from './NewPost'
 import ListPosts from './ListPosts'
-import NavCategories from './NavCategories'
+import ViewPost from './ViewPost'
 
 class App extends Component {
+
     componentDidMount() {
         this.props.dispatch(handleInitialData())
     }
 
     render() {
         return (
-            <div className="ui container">
-                <br />
-                <br />
-                <br />
-                <br />
-                <h1 className="ui header center">READABLE</h1>
-
-                <div className="ui grid">
-                    <div className="four wide column">
-                        <NavCategories/>
+            <Router>
+                <Fragment>
+                    <div className="ui container">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div>
+                            <Route path='/' exact component={ListPosts} />
+                            <Route path='/:category/:id' component={ViewPost} />
+                            <Route path='/new' component={NewPost}/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
                     </div>
-                    <div className="twelve wide column">
-                        <ListPosts/>
-                    </div>
-                </div>
-            </div>
+                </Fragment>
+            </Router>
         );
     }
 }

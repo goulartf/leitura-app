@@ -6,8 +6,6 @@ export function handleInitialData() {
     return (dispatch) => {
         return API.getInitialData()
             .then(({categories,posts}) => {
-                console.log(categories,posts)
-
                 dispatch(receiveCategories(categories))
                 dispatch(receivePosts(posts))
             })

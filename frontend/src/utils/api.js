@@ -2,7 +2,6 @@ import {normalize, schema} from 'normalizr';
 
 const api = "http://localhost:3001";
 
-
 let token = 'amaral-varal';
 
 const headers = {
@@ -30,8 +29,45 @@ const _getPosts = () =>
             return postsNormalized.entities.posts;
         });
 
+const _getComments = (postId) =>
+    fetch(`${api}/posts/${postId}/comments`, {headers})
+        .then(res => res.json())
+        .then(data => {
+            return data;
+        });
+
 const _saveVotePost = (info) =>
     fetch(`${api}/posts/${info.id}`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({option: info.vote})
+    }).then(res => res.json());
+
+const _saveAddPost = (post) =>
+    fetch(`${api}/posts`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    }).then(res => res.json());
+
+const _saveAddComment = (comment) =>
+    fetch(`${api}/comments`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(comment)
+    }).then(res => res.json());
+
+const _saveVoteComment = (info) =>
+    fetch(`${api}/comments/${info.id}`, {
         method: 'POST',
         headers: {
             ...headers,
@@ -52,6 +88,24 @@ export function getInitialData() {
 
 export function saveVotePost(info) {
     return _saveVotePost(info);
+}
+
+export function saveAddPost(post) {
+    return _saveAddPost(post);
+}
+
+export function getComments(postId) {
+    return _getComments(postId);
+}
+
+
+export function saveAddComment(comment) {
+    return _saveAddComment(comment);
+}
+
+
+export function saveVoteComment(info) {
+    return _saveVoteComment(info);
 }
 
 

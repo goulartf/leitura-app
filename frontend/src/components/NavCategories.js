@@ -10,11 +10,11 @@ class NavCategories extends Component {
         return (
 
             <div className="ui vertical menu">
-                <a className="active teal item" key={'all'}>
+                <a href='#' className="active teal item" key={'all'}>
                     All categories
                 </a>
                 {categories.map((category) => (
-                    <a className="item" key={category.name}>
+                    <a href={'#'} className="item" key={category.name}>
                         {category.name}
                     </a>
                 ))}
