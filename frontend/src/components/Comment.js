@@ -6,7 +6,6 @@ class Comment extends Component {
     render() {
 
         const {comment, onHandleVote} = this.props;
-        console.log()
 
         return (
             <React.Fragment>
@@ -40,6 +39,14 @@ class Comment extends Component {
                         </div>
                         <div className="text">
                             {comment.body}
+                        </div>
+                        <div className="actions">
+                            <a className="">
+                                <i className="edit icon"></i>
+                            </a>
+                            <a className="">
+                                <i className="trash icon"></i>
+                            </a>
                         </div>
                     </div>
                 </div>

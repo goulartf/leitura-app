@@ -3,6 +3,7 @@ import * as API from '../utils/api';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const VOTE_POST = 'VOTE_POST';
 export const ADD_POST = 'ADD_POST';
+export const EDIT_POST = 'EDIT_POST';
 export const COUNT_COMMENT_POST = 'COUNT_COMMENT_POST';
 export const ORDER_POST = 'ORDER_POST';
 
@@ -40,6 +41,14 @@ function addPost(post) {
     }
 }
 
+function editPost(post) {
+    post.timestamp = new Date().getTime()
+    return {
+        type: EDIT_POST,
+        post
+    }
+}
+
 export function handleVotePost(info) {
     return (dispatch) => {
         dispatch(votePost(info));
@@ -64,17 +73,30 @@ export function handleAddPost(post) {
     }
 }
 
+export function handleEditPost(post) {
+    return (dispatch) => {
+        dispatch(editPost(post));
+        return API.saveEditPost(post)
+            .catch((e) => {
+                console.warn('Error in handleEditPost: ', e)
+                alert('The was an error to save the post. Try again.')
+            })
+    }
+}
+
 export function handleCountCommentPost({post, value}) {
     return (dispatch) => {
         return dispatch(countCommentPost(post, value));
     }
 }
 
-export function handleOrderBy(posts,type,sort) {
+export function handleOrderBy(field,sort) {
 
     return {
         type: ORDER_POST,
-        posts
+        field,
+        sort
+
     }
 
 }

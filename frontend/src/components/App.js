@@ -1,10 +1,11 @@
 import React, {Component, Fragment} from 'react'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {handleInitialData} from '../actions/shared'
-import NewPost from './NewPost'
 import ListPosts from './ListPosts'
 import ViewPost from './ViewPost'
+import EditPost from "./EditPost";
+import AddPost from "./AddPost";
 
 class App extends Component {
 
@@ -22,9 +23,13 @@ class App extends Component {
                         <br/>
                         <br/>
                         <div>
-                            <Route path='/' exact component={ListPosts} />
-                            <Route path='/:category/:id' component={ViewPost} />
-                            <Route path='/new' component={NewPost}/>
+                            <Switch>
+                                <Route path='/' exact component={ListPosts}/>
+                                <Route path='/new' exact component={AddPost}/>
+                                <Route path='/:category' exact component={ListPosts}/>
+                                <Route path='/:category/:id' exact component={ViewPost}/>
+                                <Route path='/post/edit/:id' exact component={EditPost}/>
+                            </Switch>
                         </div>
                         <br/>
                         <br/>

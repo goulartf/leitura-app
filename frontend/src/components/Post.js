@@ -7,6 +7,7 @@ import moment from "moment";
 class Post extends Component {
 
     handleVote = vote => e => {
+
         e.preventDefault();
         const {dispatch, post} = this.props
 
@@ -18,9 +19,13 @@ class Post extends Component {
 
     }
 
+
+
     render() {
+
         const {post} = this.props;
         const classScore = post.voteScore !== 0 ? post.voteScore < 0 ? 'red' : 'green' : 'default';
+
         return (
             <div className="ui centered card fluid">
                 <div className="content">
@@ -50,6 +55,14 @@ class Post extends Component {
                     </div>
                 </div>
                 <div className="extra content">
+                    <div className="left floated author">
+                        <Link to={`/post/edit/${post.id}`} className='ui icon button primary basic'>
+                            <i className="icon edit" />
+                        </Link>
+                        <button className='ui icon button negative basic'>
+                            <i className="icon trash" />
+                        </button>
+                    </div>
                     <div className="right floated author">
                         <i className="comment icon"></i>{post.commentCount}
                     </div>

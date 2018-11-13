@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
+import {NavLink} from 'react-router-dom';
 
 class NavCategories extends Component {
 
@@ -10,20 +11,14 @@ class NavCategories extends Component {
         return (
 
             <div className="ui vertical menu">
-                <a href='#' className="active teal item" key={'all'}>
+                <NavLink to='/' className="item" exact activeClassName="active teal" key={'all'}>
                     All categories
-                </a>
+                </NavLink>
                 {categories.map((category) => (
-                    <a href={'#'} className="item" key={category.name}>
+                    <NavLink to={`/${category.path}`} exact className="item" activeClassName="active teal" key={category.path}>
                         {category.name}
-                    </a>
+                    </NavLink>
                 ))}
-                <div className="item">
-                    <div className="ui transparent icon input">
-                        <input type="text" placeholder="Search..."/>
-                        <i className="search icon"/>
-                    </div>
-                </div>
             </div>
         );
     }

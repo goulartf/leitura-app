@@ -3,34 +3,75 @@ import {connect} from 'react-redux'
 import Post from './Post';
 import {Link} from "react-router-dom";
 import NavCategories from "./NavCategories";
-import {handleOrderBy, handleVotePost} from "../actions/posts";
+import {handleReceivePost, handleReceivePostByCategory, handleOrderBy} from "../actions/posts";
 
 class ListPosts extends Component {
 
-    handleOrder = (e) => {
+    state = {
+        sortDate: 'ASC',
+        sortVote: 'ASC',
+    }
 
-        // console.log('aqi', this.props);
-        // e.preventDefault();
-        const {dispatch, posts} = this.props
-        dispatch(handleOrderBy(posts,'data','asc'));
+    handleOrderByDate = (e) => {
+
+        const {sortDate} = this.state;
+        const {dispatch} = this.props;
+
+        dispatch(handleOrderBy('timestamp', sortDate));
+
+        this.setState((state) => {
+            return {sortDate: state.sortDate === "ASC" ? "DESC" : "ASC"};
+        });
+
+    }
+
+    handleOrderByVote = (e) => {
+
+        const {sortVote} = this.state;
+        const {dispatch} = this.props;
+
+        dispatch(handleOrderBy('voteScore', sortVote));
+
+        this.setState((state) => {
+            return {sortVote: state.sortVote === "ASC" ? "DESC" : "ASC"};
+        });
 
     }
 
     render() {
 
+        const {sortDate, sortVote} = this.state;
+        const iconSortDate = sortDate === "ASC" ? "up" : "down";
+        const iconSortVote = sortVote === "ASC" ? "up" : "down";
+
         return (
             <React.Fragment>
                 <div className="ui grid">
-                    <div className="fourteen wide column">
+                    <div className="nine wide column">
                         <div className="">
                             <h1 className="ui header">READABLE</h1>
                         </div>
                     </div>
-                    <a onClick={this.handleOrder}>Order</a>
+
+                    <div className="two wide column" onClick={this.handleOrderByVote}>
+                        <button className="ui right labeled icon button blue right floated">
+                            <i className={"icon sort numeric " + iconSortVote}/>
+                            Vote
+                        </button>
+                    </div>
+
                     <div className="two wide column">
-                        <Link to='/new' exact className="ui right labeled icon button blue">
+                        <button className="ui right labeled icon button blue right floated"
+                                onClick={this.handleOrderByDate}>
+                            <i className={"icon sort amount " + iconSortDate}/>
+                            Date
+                        </button>
+                    </div>
+
+                    <div className="three wide column">
+                        <Link to='/new' className="ui right labeled icon button blue right floated">
                             <i className="plus icon"></i>
-                            Novo
+                            Try now!
                         </Link>
                     </div>
                 </div>
@@ -51,15 +92,26 @@ class ListPosts extends Component {
             </React.Fragment>
         );
     }
+
 }
 
 
-function mapStateToProps({posts}) {
+function mapStateToProps({posts}, props) {
+
+    let postsIds = Object.keys(posts);
+    const categoryParam = props.match.params.category;
+    if(categoryParam){
+        postsIds = postsIds.filter((postId) => {
+            console.log(posts[postId].category , categoryParam)
+            if(posts[postId].category === categoryParam)
+                return postId;
+        })
+    }
 
     return {
-        posts,
-        postsIds: Object.keys(posts)
+        postsIds
     }
+
 }
 
 export default connect(mapStateToProps)(ListPosts);

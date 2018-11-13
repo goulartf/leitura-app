@@ -56,6 +56,16 @@ const _saveAddPost = (post) =>
         body: JSON.stringify(post)
     }).then(res => res.json());
 
+const _saveEditPost = (post) =>
+    fetch(`${api}/posts/${post.id}`, {
+        method: 'PUT',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    }).then(res => res.json());
+
 const _saveAddComment = (comment) =>
     fetch(`${api}/comments`, {
         method: 'POST',
@@ -92,6 +102,10 @@ export function saveVotePost(info) {
 
 export function saveAddPost(post) {
     return _saveAddPost(post);
+}
+
+export function saveEditPost(post) {
+    return _saveEditPost(post);
 }
 
 export function getComments(postId) {
