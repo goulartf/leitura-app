@@ -18,15 +18,19 @@ export default class ListComments extends Component {
 
     }
 
-    handleSubmit = (newComment) => {
+    handleSubmit = (comment) => {
 
         this.setState((state) => {
                 return {
-                    comments: state.comments.concat(newComment)
+                    comments: comment.exists ? state.comments.map(c => c.id == comment.id ? comment : c) : state.comments.concat(comment)
                 }
             }
         );
-        API.saveAddComment(newComment);
+
+        if (comment.exists)
+            API.saveAddComment(comment);
+        else
+            API.saveEditComment(comment);
 
     }
 
@@ -62,7 +66,8 @@ export default class ListComments extends Component {
                     <div className="content">
                         <div className="ui comments">
                             {this.state.comments.map((comment) => (
-                                <Comment comment={comment} key={comment.id} onHandleVote={this.handleVote}/>
+                                <Comment post={post} comment={comment} key={comment.id}
+                                         onHandleSubmit={this.handleSubmit} onHandleVote={this.handleVote}/>
                             ))}
                         </div>
                     </div>

@@ -46,8 +46,6 @@ class NewComment extends Component {
         dispatch(handleCountCommentPost({post,value:1}));
         this.props.onHandleSubmit(newComment);
 
-
-
     }
 
     render() {
@@ -60,7 +58,7 @@ class NewComment extends Component {
             <div className="ui one column grid">
                 <div className="column">
 
-                    <form className='new-tweet' onSubmit={this.handleSubmit} >
+
                         <div className="ui fluid card">
                             <div className="content">
                                 <div className="header">Reply</div>
@@ -85,12 +83,11 @@ class NewComment extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <button className={"ui bottom attached button green " + disableSubmit}>
+                            <button className={"ui bottom attached button green " + disableSubmit} onClick={this.handleSubmit}>
                                 <i className="add icon"></i>
                                 New Reply
                             </button>
                         </div>
-                    </form>
                 </div>
             </div>
         );
