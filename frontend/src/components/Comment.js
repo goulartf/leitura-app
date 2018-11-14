@@ -14,7 +14,7 @@ class Comment extends Component {
 
     render() {
 
-        const {comment, onHandleVote, onHandleSubmit, post} = this.props;
+        const {comment, onHandleVote, onHandleSubmit, onHandleDelete, post} = this.props;
         const {edit} = this.state;
 
         return (
@@ -55,7 +55,7 @@ class Comment extends Component {
                                 <a className="" onClick={this.handleEdit}>
                                     <i className="edit icon"></i>
                                 </a>
-                                <a className="">
+                                <a className="" onClick={onHandleDelete(comment)}>
                                     <i className="trash icon"></i>
                                 </a>
                             </div>

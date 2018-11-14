@@ -66,6 +66,15 @@ const _saveEditPost = (post) =>
         body: JSON.stringify(post)
     }).then(res => res.json());
 
+const _saveDeletePost = (post) =>
+    fetch(`${api}/posts/${post.id}`, {
+        method: 'DELETE',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json());
+
 const _saveAddComment = (comment) =>
     fetch(`${api}/comments`, {
         method: 'POST',
@@ -84,6 +93,15 @@ const _saveEditComment = (comment) =>
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(comment)
+    }).then(res => res.json());
+
+const _saveDeleteComment = (comment) =>
+    fetch(`${api}/comments/${comment.id}`, {
+        method: 'DELETE',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        }
     }).then(res => res.json());
 
 const _saveVoteComment = (info) =>
@@ -111,13 +129,15 @@ export function saveVotePost(info) {
 }
 
 export function saveAddPost(post) {
-
-    console.log('api post',post)
     return _saveAddPost(post);
 }
 
 export function saveEditPost(post) {
     return _saveEditPost(post);
+}
+
+export function saveDeletePost(post) {
+    return _saveDeletePost(post);
 }
 
 export function getComments(postId) {
@@ -132,18 +152,11 @@ export function saveEditComment(comment) {
     return _saveEditComment(comment);
 }
 
+export function saveDeleteComment(comment) {
+    console.log(comment, "delete");
+    return _saveDeleteComment(comment);
+}
+
 export function saveVoteComment(info) {
     return _saveVoteComment(info);
 }
-
-
-// export const search = (query) =>
-//     fetch(`${api}/search`, {
-//         method: 'POST',
-//         headers: {
-//             ...headers,
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ query })
-//     }).then(res => res.json())
-//         .then(data => data.books)

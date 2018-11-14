@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {handleVotePost} from "../actions/posts";
+import {handleDeletePost, handleVotePost} from "../actions/posts";
 import {Link, withRouter} from 'react-router-dom';
 import moment from "moment";
 
@@ -16,6 +16,17 @@ class Post extends Component {
             vote: vote,
             hasVote: post.hasVote ? true : false
         }))
+
+    }
+
+    handleDelete = () => {
+        const {dispatch, post, history,id} = this.props
+
+        dispatch(handleDeletePost(post))
+
+        if(id){
+            history.push('/')
+        }
 
     }
 
@@ -57,7 +68,7 @@ class Post extends Component {
                         <Link to={`/post/edit/${post.id}`} className='ui icon button primary basic'>
                             <i className="icon edit" />
                         </Link>
-                        <button className='ui icon button negative basic'>
+                        <button className='ui icon button negative basic' onClick={this.handleDelete}>
                             <i className="icon trash" />
                         </button>
                     </div>
@@ -78,4 +89,4 @@ function mapStateToProps({posts}, {id}) {
     }
 }
 
-export default connect(mapStateToProps)(Post)
+export default withRouter(connect(mapStateToProps)(Post))

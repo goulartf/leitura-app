@@ -77,7 +77,8 @@ class FormComment extends Component {
 
         this.setState(() => ({
             body: '',
-            author: ''
+            author: '',
+            profile: ''
         }));
 
         onHandleSubmit(objComment);

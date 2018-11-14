@@ -6,6 +6,7 @@ export const ADD_POST = 'ADD_POST';
 export const EDIT_POST = 'EDIT_POST';
 export const COUNT_COMMENT_POST = 'COUNT_COMMENT_POST';
 export const ORDER_POST = 'ORDER_POST';
+export const DELETE_POST = 'DELETE_POST';
 
 export function receivePosts(posts) {
     return {
@@ -49,38 +50,38 @@ function editPost(post) {
     }
 }
 
+function deletePost(post) {
+    return {
+        type: DELETE_POST,
+        post
+    }
+}
+
 export function handleVotePost(info) {
     return (dispatch) => {
         dispatch(votePost(info));
-        return API.saveVotePost(info)
-            .catch((e) => {
-                console.warn('Error in HandleVote: ', e)
-                dispatch(votePost(info))
-                alert('The was an error voting the post. Try again.')
-            })
+        return API.saveVotePost(info);
     }
 }
 
 export function handleAddPost(post) {
     return (dispatch) => {
         dispatch(addPost(post));
-        return API.saveAddPost(post)
-            .catch((e) => {
-                console.warn('Error in handleAddPost: ', e)
-                // dispatch(votePost(info))
-                alert('The was an error to save the post. Try again.')
-            })
+        return API.saveAddPost(post);
     }
 }
 
 export function handleEditPost(post) {
     return (dispatch) => {
         dispatch(editPost(post));
-        return API.saveEditPost(post)
-            .catch((e) => {
-                console.warn('Error in handleEditPost: ', e)
-                alert('The was an error to save the post. Try again.')
-            })
+        return API.saveEditPost(post);
+    }
+}
+
+export function handleDeletePost(post) {
+    return (dispatch) => {
+        dispatch(deletePost(post));
+        return API.saveDeletePost(post);
     }
 }
 

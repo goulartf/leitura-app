@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import Comment from './Comment';
 import * as API from '../utils/api';
 import AddComment from "./AddComment";
+import {handleCountCommentPost} from "../actions/posts";
 
-export default class ListComments extends Component {
+class ListComments extends Component {
 
     state = {
         comments: []
@@ -53,6 +55,22 @@ export default class ListComments extends Component {
 
     }
 
+    handleDelete = (comment) => e => {
+
+        const {post,dispatch} = this.props;
+
+        this.setState((state) => {
+                return {
+                    comments: state.comments.filter(c => c.id !== comment.id ? true : false)
+                }
+            }
+        );
+
+        API.saveDeleteComment(comment);
+        dispatch(handleCountCommentPost({post,value:-1}));
+
+    }
+
     render() {
 
         const {post} = this.props;
@@ -66,8 +84,11 @@ export default class ListComments extends Component {
                     <div className="content">
                         <div className="ui comments">
                             {this.state.comments.map((comment) => (
-                                <Comment post={post} comment={comment} key={comment.id}
-                                         onHandleSubmit={this.handleSubmit} onHandleVote={this.handleVote}/>
+                                <Comment post={post} comment={comment}
+                                         key={comment.id}
+                                         onHandleSubmit={this.handleSubmit}
+                                         onHandleDelete={this.handleDelete}
+                                         onHandleVote={this.handleVote}/>
                             ))}
                         </div>
                     </div>
@@ -77,3 +98,5 @@ export default class ListComments extends Component {
         );
     }
 }
+
+export default connect()(ListComments)

@@ -1,4 +1,4 @@
-import {RECEIVE_POSTS, VOTE_POST, ADD_POST, COUNT_COMMENT_POST, ORDER_POST, EDIT_POST} from '../actions/posts'
+import {RECEIVE_POSTS, VOTE_POST, ADD_POST, COUNT_COMMENT_POST, ORDER_POST, EDIT_POST, DELETE_POST} from '../actions/posts'
 import {normalize, schema} from "normalizr";
 
 export default function posts(state = {}, action) {
@@ -29,6 +29,11 @@ export default function posts(state = {}, action) {
                     ...state[action.post.id],
                     ...action.post
                 }
+            }
+        case DELETE_POST :
+            delete state[action.post.id]
+            return {
+                ...state
             }
         case COUNT_COMMENT_POST :
             return {
