@@ -19,8 +19,6 @@ class Post extends Component {
 
     }
 
-
-
     render() {
 
         const {post} = this.props;
@@ -41,7 +39,7 @@ class Post extends Component {
                     <div className="header">
                         <Link to={`/${post.category}/${post.id}`} className='tweet'>
                         <img className="ui avatar image"
-                             src="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"/> {post.author}
+                             src={`/images/profile/${post.profile}`}/> {post.author}
                         <br/>
                         {post.title}
                         </Link>

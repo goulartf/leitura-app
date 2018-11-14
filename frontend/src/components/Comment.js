@@ -22,7 +22,7 @@ class Comment extends Component {
                 {!edit && (
                     <div className="comment">
                         <a className="avatar">
-                            <img src="https://react.semantic-ui.com//images/avatar/small/matt.jpg"/>
+                            <img src={`/images/profile/${comment.profile}`}/>
                         </a>
                         <div className="content">
                             <a className="author">{comment.author}</a>

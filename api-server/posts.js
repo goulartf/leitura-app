@@ -9,6 +9,7 @@ const defaultData = {
     title: 'Udacity is the best place to learn React',
     body: 'Everyone says so after all.',
     author: 'thingtwo',
+    profile: 'profile1.jpg',
     category: 'react',
     voteScore: 6,
     deleted: false,
@@ -20,6 +21,7 @@ const defaultData = {
     title: 'Learn Redux in 10 minutes!',
     body: 'Just kidding. It takes more than 10 minutes to learn technology.',
     author: 'thingone',
+    profile: 'profile2.jpg',
     category: 'redux',
     voteScore: -5,
     deleted: false,
@@ -74,8 +76,9 @@ function add (token, post) {
       title: post.title,
       body: post.body,
       author: post.author,
+      profile: post.profile,
       category: post.category,
-      voteScore: 1,
+      voteScore: 0,
       deleted: false,
       commentCount: 0
     }

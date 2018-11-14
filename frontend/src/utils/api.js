@@ -111,6 +111,8 @@ export function saveVotePost(info) {
 }
 
 export function saveAddPost(post) {
+
+    console.log('api post',post)
     return _saveAddPost(post);
 }
 

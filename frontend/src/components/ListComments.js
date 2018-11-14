@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Comment from './Comment';
 import * as API from '../utils/api';
-import NewComment from "./NewComment";
+import AddComment from "./AddComment";
 
 export default class ListComments extends Component {
 
@@ -27,7 +27,7 @@ export default class ListComments extends Component {
             }
         );
 
-        if (comment.exists)
+        if (!comment.exists)
             API.saveAddComment(comment);
         else
             API.saveEditComment(comment);
@@ -72,7 +72,7 @@ export default class ListComments extends Component {
                         </div>
                     </div>
                 </div>
-                <NewComment post={post} onHandleSubmit={this.handleSubmit}/>
+                <AddComment post={post} onHandleSubmit={this.handleSubmit}/>
             </React.Fragment>
         );
     }

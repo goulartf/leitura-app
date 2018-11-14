@@ -3,6 +3,7 @@ import {Redirect} from 'react-router-dom'
 import {Dropdown} from 'semantic-ui-react'
 import {handleAddPost, handleEditPost} from '../actions/posts'
 import connect from "react-redux/es/connect/connect";
+import DropDownProfile from "./generics/DropDownProfile";
 
 class FormPost extends Component {
 
@@ -11,6 +12,7 @@ class FormPost extends Component {
         body: '',
         author: '',
         category: '',
+        profile: '',
         redirect: false
     };
 
@@ -22,7 +24,8 @@ class FormPost extends Component {
                 title: post.title,
                 body: post.body,
                 author: post.author,
-                category: post.category
+                category: post.category,
+                profile: post.profile
             }))
         }
 
@@ -37,10 +40,18 @@ class FormPost extends Component {
                 title: post.title,
                 body: post.body,
                 author: post.author,
-                category: post.category
+                category: post.category,
+                profile: post.profile
             }))
         }
 
+    }
+
+    handleChangeProfile = (e, { value }) => {
+        const profile = value;
+        this.setState(() => ({
+            profile
+        }))
     }
 
     handleChangeBody = (e) => {
@@ -74,13 +85,13 @@ class FormPost extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
 
-        const {title, body, author, category} = this.state
+        const {title, body, author, category, profile} = this.state
         const {dispatch, id} = this.props
 
         if (id) {
-            dispatch(handleEditPost({id, title, body, author, category}))
+            dispatch(handleEditPost({id, title, body, author, category, profile}))
         } else {
-            dispatch(handleAddPost({title, body, author, category}))
+            dispatch(handleAddPost({title, body, author, category, profile}))
         }
 
         this.setState(() => ({
@@ -88,6 +99,7 @@ class FormPost extends Component {
             text: '',
             author: '',
             category: '',
+            profile: '',
             redirect: true
         }))
 
@@ -96,7 +108,7 @@ class FormPost extends Component {
 
     render() {
 
-        const {title, body, author, category, redirect} = this.state
+        const {title, body, author, category, profile, redirect} = this.state
 
         const {categories, id} = this.props;
 
@@ -104,7 +116,7 @@ class FormPost extends Component {
             return <Redirect to='/'/>
         }
 
-        const disableSubmit = body === '' || title === '' || author === '' || category === '' ? 'disabled' : '';
+        const disableSubmit = body === '' || title === '' || author === '' || category === ''|| profile === '' ? 'disabled' : '';
 
         return (
 
@@ -117,6 +129,13 @@ class FormPost extends Component {
 
                         <div className="description">
                             <div className="ui form">
+                                <div className="required field">
+                                    <label>Profile</label>
+                                    <DropDownProfile clearable
+                                                     placeholder="Select Profile"
+                                                     value={profile}
+                                                     onHandleChangeProfile={this.handleChangeProfile}/>
+                                </div>
                                 <div className="required field">
                                     <label>Category</label>
                                     <Dropdown clearable

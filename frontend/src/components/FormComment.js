@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {handleCountCommentPost} from "../actions/posts";
 import connect from "react-redux/es/connect/connect";
+import DropDownProfile from "./generics/DropDownProfile";
 
 class FormComment extends Component {
 
     state = {
         body: '',
-        author: ''
+        author: '',
+        profile: ''
     };
 
     componentDidMount() {
@@ -15,10 +17,18 @@ class FormComment extends Component {
         if (comment) {
             this.setState(() => ({
                 body: comment.body,
-                author: comment.author
+                author: comment.author,
+                profile: comment.profile,
             }))
         }
 
+    }
+
+    handleChangeProfile = (e, { value }) => {
+        const profile = value;
+        this.setState(() => ({
+            profile
+        }))
     }
 
     handleChangeBody = (e) => {
@@ -38,7 +48,7 @@ class FormComment extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const {body, author} = this.state
+        const {body, author, profile} = this.state
         const {post, dispatch, onHandleSubmit, onHandleEdit, comment} = this.props
 
         let objComment;
@@ -47,6 +57,7 @@ class FormComment extends Component {
                 id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                 body,
                 author,
+                profile,
                 parentId: post.id,
                 timestamp: new Date().getTime(),
                 voteScore: 0,
@@ -59,6 +70,7 @@ class FormComment extends Component {
                 ...comment,
                 body,
                 author,
+                profile,
                 exists: true
             }
         }
@@ -66,18 +78,22 @@ class FormComment extends Component {
         this.setState(() => ({
             body: '',
             author: ''
-        }))
+        }));
+
         onHandleSubmit(objComment);
-        onHandleEdit();
+
+        if(onHandleEdit) {
+            onHandleEdit();
+        }
 
     }
 
     render() {
 
-        const {body, author} = this.state;
+        const {body, author, profile} = this.state;
         const {comment} = this.props;
 
-        const disableSubmit = body === '' || author === '' ? 'disabled' : '';
+        const disableSubmit = body === '' || author === '' || profile === '' ? 'disabled' : '';
 
         return (
             <React.Fragment>
@@ -88,6 +104,13 @@ class FormComment extends Component {
                     <div className="content">
                         <div className="description">
                             <div className="ui form">
+                                <div className="required field">
+                                    <label>Profile</label>
+                                    <DropDownProfile clearable
+                                                     placeholder="Select Profile"
+                                                     value={profile}
+                                                     onHandleChangeProfile={this.handleChangeProfile}/>
+                                </div>
                                 <div className="required field">
                                     <label>Author</label>
                                     <input type="text"
