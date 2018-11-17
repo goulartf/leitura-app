@@ -35,13 +35,15 @@ Todas os comentarios são listados na pagina de detalhe do post
 * Iniciar o dev com `yarn start`
 
 #
-### Resources
 
+### Recursos
 * [Create React App](https://github.com/facebookincubator/create-react-app)
 * [Udacity's HTML Style Guide](http://udacity.github.io/frontend-nanodegree-styleguide/index.html)
 * [Udacity's CSS Style Guide](http://udacity.github.io/frontend-nanodegree-styleguide/css.html)
 * [Udacity's JavaScript Style Guide](http://udacity.github.io/frontend-nanodegree-styleguide/javascript.html)
 * [Udacity's Git Style Guide](https://udacity.github.io/git-styleguide/)
+
+### Recursos Adicionais
 * [Semantic UI](https://semantic-ui.com)
 * [React Semantic UI](https://react.semantic-ui.com/)
 * [Moment](https://momentjs.com/)

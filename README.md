@@ -32,5 +32,5 @@ Todas as informações do frotend, pode ser encontradas aqui
 
 
 #
-### Resources
+### Recursos Adicionais
 * [Concurrently](https://github.com/kimmobrunfeldt/concurrently)
