@@ -6,12 +6,12 @@ Neste Web App os usuários podem criar posts, comentarios, e votar neles, e nave
 Este repositorio contem os codigos da API e do frontend para desenvolvimento.
 
 # (Opcional) DEMO
-Caso queira rodar diretamento o projeto
-`npm start`
+Caso queira rodar diretamente o projeto
+- `npm install`
+- `npm start`
 
 ## DEV
-
-Para começar da maneira correta seguir os passos abaixo:
+Seguir os passos abaixo:
 
 * 1 - API SERVER
     - `cd api-server`
