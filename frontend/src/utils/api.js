@@ -23,7 +23,6 @@ const _getPosts = () =>
     fetch(`${api}/posts`, {headers})
         .then(res => res.json())
         .then(data => {
-            console.log(typeof data);
             const postSchema = new schema.Array(new schema.Entity('posts'));
             const postsNormalized = normalize(data, postSchema);
             return postsNormalized.entities.posts;
@@ -33,7 +32,9 @@ const _getComments = (postId) =>
     fetch(`${api}/posts/${postId}/comments`, {headers})
         .then(res => res.json())
         .then(data => {
-            return data;
+            const commentSchema = new schema.Array(new schema.Entity('comments'));
+            const commentsNormalized = normalize(data, commentSchema);
+            return commentsNormalized.entities.comments;
         });
 
 const _saveVotePost = (info) =>
@@ -153,7 +154,6 @@ export function saveEditComment(comment) {
 }
 
 export function saveDeleteComment(comment) {
-    console.log(comment, "delete");
     return _saveDeleteComment(comment);
 }
 

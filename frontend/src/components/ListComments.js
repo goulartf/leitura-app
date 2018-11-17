@@ -1,80 +1,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import Comment from './Comment';
-import * as API from '../utils/api';
 import AddComment from "./AddComment";
-import {handleCountCommentPost} from "../actions/posts";
+import {handleReceiveComments} from "../actions/comments";
+import CommentPlaceholder from "./CommentPlaceholder";
 
 class ListComments extends Component {
 
-    state = {
-        comments: []
-    };
-
     componentDidMount() {
-
-        API.getComments(this.props.post.id).then((comments) => {
-            console.log(comments);
-            this.setState(() => ({comments}));
-        });
-
-    }
-
-    handleSubmit = (comment) => {
-
-        this.setState((state) => {
-                return {
-                    comments: comment.exists ? state.comments.map(c => c.id == comment.id ? comment : c) : state.comments.concat(comment)
-                }
-            }
-        );
-
-        if (!comment.exists)
-            API.saveAddComment(comment);
-        else
-            API.saveEditComment(comment);
-
-    }
-
-    handleVote = (_comment, vote) => e => {
-
-        this.setState((state) => {
-                return {
-                    comments: state.comments.map(comment => {
-                        if (comment.id === _comment.id) {
-                            comment.voteScore = vote === 'upVote' ? comment.voteScore + 1 : comment.voteScore - 1;
-                            comment.hasVote = vote === 'upVote' ? "up" : "down";
-                        }
-                        return comment;
-                    })
-                }
-            }
-        );
-
-        API.saveVoteComment({id: _comment.id, vote});
-
-    }
-
-    handleDelete = (comment) => e => {
-
-        const {post,dispatch} = this.props;
-
-        this.setState((state) => {
-                return {
-                    comments: state.comments.filter(c => c.id !== comment.id ? true : false)
-                }
-            }
-        );
-
-        API.saveDeleteComment(comment);
-        dispatch(handleCountCommentPost({post,value:-1}));
-
+        const {post} = this.props;
+        if (post) {
+            const {dispatch} = this.props;
+            dispatch(handleReceiveComments(post))
+        }
     }
 
     render() {
 
-        const {post} = this.props;
-
+        const {post, commentsIds, loader} = this.props;
         return (
             <React.Fragment>
                 <div className="ui fluid card">
@@ -83,20 +26,45 @@ class ListComments extends Component {
                     </div>
                     <div className="content">
                         <div className="ui comments">
-                            {this.state.comments.map((comment) => (
-                                <Comment post={post} comment={comment}
-                                         key={comment.id}
-                                         onHandleSubmit={this.handleSubmit}
-                                         onHandleDelete={this.handleDelete}
-                                         onHandleVote={this.handleVote}/>
+
+                            {loader && loader.show && (
+                                <CommentPlaceholder/>
+                            )}
+
+                            {commentsIds && commentsIds.map((commentId) => (
+                                <Comment post={post}
+                                         key={commentId}
+                                         id={commentId}/>
                             ))}
+
+                            {loader && !loader.show && commentsIds.length <= 0 && (
+                                <div className="ui info message">
+                                    <div className="align center header">
+                                        Ops! no comments posted here :/<br/>
+                                        Be the first!
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
-                <AddComment post={post} onHandleSubmit={this.handleSubmit}/>
+                <AddComment post={post}/>
             </React.Fragment>
         );
     }
 }
 
-export default connect()(ListComments)
+function mapStateToProps({comments, loader}, {post}) {
+
+    return {
+        loader,
+        commentsIds: Object.keys(comments).filter((commentId) => {
+            return comments[commentId].parentId === post.id;
+        }).sort((a, b) => {
+            return comments[b].voteScore - comments[a].voteScore
+        })
+    }
+
+}
+
+export default connect(mapStateToProps)(ListComments);

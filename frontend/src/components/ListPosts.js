@@ -1,15 +1,18 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux'
 import Post from './Post';
 import {Link} from "react-router-dom";
 import NavCategories from "./NavCategories";
-import {handleReceivePost, handleReceivePostByCategory, handleOrderBy} from "../actions/posts";
+import {handleReceivePost, handleReceivePostByCategory,handleOrderBy,orderPost} from "../actions/posts";
+import PostListPlaceholder from "./PostModeView/PostListPlaceholder";
 
 class ListPosts extends Component {
 
     state = {
         sortDate: 'ASC',
+        sortDateActive: false,
         sortVote: 'ASC',
+        sortVoteActive: false,
     }
 
     handleOrderByDate = (e) => {
@@ -20,7 +23,11 @@ class ListPosts extends Component {
         dispatch(handleOrderBy('timestamp', sortDate));
 
         this.setState((state) => {
-            return {sortDate: state.sortDate === "ASC" ? "DESC" : "ASC"};
+            return {
+                sortDate: state.sortDate === "ASC" ? "DESC" : "ASC",
+                sortDateActive: true,
+                sortVoteActive: false
+            };
         });
 
     }
@@ -33,59 +40,67 @@ class ListPosts extends Component {
         dispatch(handleOrderBy('voteScore', sortVote));
 
         this.setState((state) => {
-            return {sortVote: state.sortVote === "ASC" ? "DESC" : "ASC"};
+            return {
+                sortVote: state.sortVote === "ASC" ? "DESC" : "ASC",
+                sortDateActive: false,
+                sortVoteActive: true
+            };
         });
 
     }
 
     render() {
 
-        const {sortDate, sortVote} = this.state;
+        const {sortDate, sortVote,sortDateActive,sortVoteActive} = this.state;
+        const {loader} = this.props;
+        const btnSortDateActive = sortDateActive ? "blue" : "";
+        const btnSortVoteActive = sortVoteActive ? "blue" : "";
         const iconSortDate = sortDate === "ASC" ? "up" : "down";
         const iconSortVote = sortVote === "ASC" ? "up" : "down";
 
         return (
             <React.Fragment>
                 <div className="ui grid">
-                    <div className="nine wide column">
-                        <div className="">
-                            <h1 className="ui header">READABLE</h1>
-                        </div>
-                    </div>
-
-                    <div className="two wide column" onClick={this.handleOrderByVote}>
-                        <button className="ui right labeled icon button blue right floated">
+                    <div className="sixteen wide column">
+                        <button className={"ui right labeled icon button right floated " + btnSortVoteActive }
+                                onClick={this.handleOrderByVote}>
                             <i className={"icon sort numeric " + iconSortVote}/>
                             Vote
                         </button>
-                    </div>
-
-                    <div className="two wide column">
-                        <button className="ui right labeled icon button blue right floated"
+                        <button className={"ui right labeled icon button right floated " + btnSortDateActive  }
                                 onClick={this.handleOrderByDate}>
                             <i className={"icon sort amount " + iconSortDate}/>
                             Date
                         </button>
                     </div>
+                </div>
+                <br />
+                <br />
 
-                    <div className="three wide column">
-                        <Link to='/new' className="ui right labeled icon button blue right floated">
-                            <i className="plus icon"></i>
-                            Try now!
-                        </Link>
-                    </div>
+                <div className="ui two doubling cards">
+                    {loader && loader.show && (
+                        <React.Fragment>
+                            <PostListPlaceholder/>
+                            <PostListPlaceholder/>
+                        </React.Fragment>
+                    )}
+
+                    {loader && !loader.show && this.props.postsIds.map((id) => (
+                        <Post id={id} key={id} modeView="list"/>
+                    ))}
+
                 </div>
 
                 <div className="ui grid">
-                    <div className="four wide column">
-                        <NavCategories/>
-                    </div>
-                    <div className="twelve wide column">
-                        <div className="ui two stackable cards">
-                            {this.props.postsIds.map((id) => (
-                                <Post id={id} key={id}/>
-                            ))}
-                        </div>
+                    <div className="sixteen wide column">
+                        {loader && !loader.show && this.props.postsIds.length <= 0 && (
+                            <div className="ui info message">
+                                <div className="align center header">
+                                    Ops! no posts here :/<br/>
+                                    Be the first!
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -96,20 +111,20 @@ class ListPosts extends Component {
 }
 
 
-function mapStateToProps({posts}, props) {
+function mapStateToProps({posts, loader}, props) {
 
     let postsIds = Object.keys(posts);
     const categoryParam = props.match.params.category;
-    if(categoryParam){
+    if (categoryParam) {
         postsIds = postsIds.filter((postId) => {
-            console.log(posts[postId].category , categoryParam)
-            if(posts[postId].category === categoryParam)
+            if (posts[postId].category === categoryParam)
                 return postId;
         })
     }
 
     return {
-        postsIds
+        postsIds,
+        loader
     }
 
 }

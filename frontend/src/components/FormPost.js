@@ -96,7 +96,7 @@ class FormPost extends Component {
 
         this.setState(() => ({
             title: '',
-            text: '',
+            body: '',
             author: '',
             category: '',
             profile: '',
@@ -110,10 +110,10 @@ class FormPost extends Component {
 
         const {title, body, author, category, profile, redirect} = this.state
 
-        const {categories, id} = this.props;
+        const {post, categories, id} = this.props;
 
         if (redirect === true) {
-            return <Redirect to='/'/>
+            return <Redirect to="/" />
         }
 
         const disableSubmit = body === '' || title === '' || author === '' || category === ''|| profile === '' ? 'disabled' : '';
@@ -196,9 +196,8 @@ class FormPost extends Component {
 }
 
 function mapStateToProps({posts, categories}, {id}) {
-    console.log(id);
     return {
-        post: id ? posts[id] : null,
+        post: posts[id],
         categories: Object.keys(categories).map(category => {
                 return {
                     key: categories[category].path,

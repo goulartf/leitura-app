@@ -48,16 +48,15 @@ export default function posts(state = {}, action) {
             const {field,sort} = action;
             const posts = state;
 
-            const data = Object.keys(posts)
+            const data = Object.values(posts)
                 .sort((a, b) => {
                     if(sort == "ASC"){
-                        return posts[a][field] - posts[b][field];
+                        return a[field] - b[field];
                     }else{
-                        return posts[b][field] - posts[a][field];
+                        return b[field] - a[field];
                     }
 
-                })
-                .map(postId => (posts[postId]));
+                });
 
             const postSchema = new schema.Array(new schema.Entity('posts'));
             const postsNormalized = normalize(data, postSchema);

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {handleCountCommentPost} from "../actions/posts";
+import {handleAddPost, handleCountCommentPost, handleEditPost} from "../actions/posts";
+import {handleAddComment, handleEditComment} from "../actions/comments";
 import connect from "react-redux/es/connect/connect";
 import DropDownProfile from "./generics/DropDownProfile";
 
@@ -24,7 +25,7 @@ class FormComment extends Component {
 
     }
 
-    handleChangeProfile = (e, { value }) => {
+    handleChangeProfile = (e, {value}) => {
         const profile = value;
         this.setState(() => ({
             profile
@@ -49,12 +50,11 @@ class FormComment extends Component {
         e.preventDefault();
 
         const {body, author, profile} = this.state
-        const {post, dispatch, onHandleSubmit, onHandleEdit, comment} = this.props
+        const {post, dispatch, onHandleEdit, comment} = this.props
 
         let objComment;
-        if(!comment){
+        if (!comment) {
             objComment = {
-                id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
                 body,
                 author,
                 profile,
@@ -63,9 +63,9 @@ class FormComment extends Component {
                 voteScore: 0,
                 exists: false
             };
-
-            dispatch(handleCountCommentPost({post,value:1}));
-        }else{
+            dispatch(handleAddComment(objComment))
+            dispatch(handleCountCommentPost({post, value: 1}));
+        } else {
             objComment = {
                 ...comment,
                 body,
@@ -73,6 +73,7 @@ class FormComment extends Component {
                 profile,
                 exists: true
             }
+            dispatch(handleEditComment(objComment))
         }
 
         this.setState(() => ({
@@ -81,9 +82,8 @@ class FormComment extends Component {
             profile: ''
         }));
 
-        onHandleSubmit(objComment);
 
-        if(onHandleEdit) {
+        if (onHandleEdit) {
             onHandleEdit();
         }
 
@@ -92,7 +92,7 @@ class FormComment extends Component {
     render() {
 
         const {body, author, profile} = this.state;
-        const {comment} = this.props;
+        const {comments} = this.props;
 
         const disableSubmit = body === '' || author === '' || profile === '' ? 'disabled' : '';
 
@@ -129,14 +129,12 @@ class FormComment extends Component {
                             </div>
                         </div>
                     </div>
+
                     <button className={"ui bottom attached button green " + disableSubmit} onClick={this.handleSubmit}>
                         <i className="add icon"></i>
-                        New Reply
+                        Reply
                     </button>
-                    {/*<button className={"ui bottom attached button red " + disableSubmit} onClick={this.handleSubmit}>*/}
-                        {/*<i className="minus icon"></i>*/}
-                        {/*Cancel*/}
-                    {/*</button>*/}
+
                 </div>
 
             </React.Fragment>

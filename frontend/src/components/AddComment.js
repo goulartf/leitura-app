@@ -13,7 +13,7 @@ class AddComment extends Component {
             <div className="ui one column grid">
                 <div className="column">
 
-                    <FormComment onHandleSubmit={onHandleSubmit} post={post} />
+                    <FormComment post={post} />
 
                 </div>
             </div>

@@ -1,10 +1,16 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux'
 import {handleDeletePost, handleVotePost} from "../actions/posts";
-import {Link, withRouter} from 'react-router-dom';
-import moment from "moment";
+import {withRouter} from 'react-router-dom';
+import PostList from "./PostModeView/PostList";
+import PostView from "./PostModeView/PostView";
+import PostListPlaceholder from "./PostModeView/PostListPlaceholder";
 
 class Post extends Component {
+
+    componentDidMount(){
+
+    }
 
     handleVote = vote => e => {
 
@@ -32,51 +38,24 @@ class Post extends Component {
 
     render() {
 
-        const {post} = this.props;
-        const classScore = post.voteScore !== 0 ? post.voteScore < 0 ? 'red' : 'green' : 'default';
+        const {post, modeView, loader} = this.props;
 
         return (
-            <div className="ui centered card fluid">
-                <div className="content">
-                    <div className={"ui right ribbon label " + classScore}>
-                        {!post.hasVote && (
-                            <span>
-                                <a href="#" onClick={this.handleVote('downVote')}><i className="thumbs down icon"></i></a>
-                                <a href="#" onClick={this.handleVote('upVote')}><i className="thumbs up icon"></i></a>
-                            </span>
-                        )}
-                        {post.voteScore}
-                    </div>
-                    <div className="header">
-                        <Link to={`/${post.category}/${post.id}`} className='tweet'>
-                        <img className="ui avatar image"
-                             src={`/images/profile/${post.profile}`}/> {post.author}
-                        <br/>
-                        {post.title}
-                        </Link>
-                    </div>
-                    <div className="meta">
-                        <span className="right floated time">{moment(post.timestamp).calendar()}</span>
-                        <span className="category">{post.category}</span>
-                    </div>
-                    <div className="description">
-                        <p>{post.body}</p>
-                    </div>
-                </div>
-                <div className="extra content">
-                    <div className="left floated author">
-                        <Link to={`/post/edit/${post.id}`} className='ui icon button primary basic'>
-                            <i className="icon edit" />
-                        </Link>
-                        <button className='ui icon button negative basic' onClick={this.handleDelete}>
-                            <i className="icon trash" />
-                        </button>
-                    </div>
-                    <div className="right floated author">
-                        <i className="comment icon"></i>{post.commentCount}
-                    </div>
-                </div>
-            </div>
+            <Fragment>
+
+                {modeView === "list" && loader && loader.show &&  (
+                    <PostListPlaceholder post={post} onHandleVote={this.handleVote} onHandleDelete={this.handleDelete}/>
+                )}
+
+                {modeView === "list" && (
+                    <PostList post={post} onHandleVote={this.handleVote} onHandleDelete={this.handleDelete}/>
+                )}
+
+                {modeView === "view" && (
+                    <PostView post={post} onHandleVote={this.handleVote} onHandleDelete={this.handleDelete}/>
+                )}
+            </Fragment>
+
         );
     }
 }
@@ -87,6 +66,7 @@ function mapStateToProps({posts}, {id}) {
     return {
         post: posts[id]
     }
+
 }
 
 export default withRouter(connect(mapStateToProps)(Post))

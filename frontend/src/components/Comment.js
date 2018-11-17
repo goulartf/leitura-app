@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import moment from 'moment'
 import FormComment from "./FormComment";
+import {withRouter} from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
+import {handleCountCommentPost} from "../actions/posts";
+import {handleVoteComment, handleDeleteComment} from "../actions/comments";
 
 class Comment extends Component {
 
@@ -12,9 +16,30 @@ class Comment extends Component {
         this.setState((oldState) => ({edit: oldState.edit ? false : true}));
     }
 
+    handleVote = vote => e => {
+
+        e.preventDefault();
+        const {dispatch, comment} = this.props
+
+        dispatch(handleVoteComment({
+            id: comment.id,
+            vote: vote,
+            hasVote: comment.hasVote ? true : false
+        }))
+
+    }
+
+    handleDelete = (e) => {
+        const {dispatch, comment, post} = this.props
+
+        dispatch(handleDeleteComment(comment))
+        dispatch(handleCountCommentPost({post, value: -1}));
+
+    }
+
     render() {
 
-        const {comment, onHandleVote, onHandleSubmit, onHandleDelete, post} = this.props;
+        const {comment, onHandleSubmit, post} = this.props;
         const {edit} = this.state;
 
         return (
@@ -39,10 +64,10 @@ class Comment extends Component {
 
                                 {typeof comment.hasVote == "undefined" && (
                                     <div>
-                                        <a className="" onClick={onHandleVote(comment, 'downVote')}>
+                                        <a className="" onClick={this.handleVote('downVote')}>
                                             <i className="thumbs down icon"></i>
                                         </a>
-                                        <a className="" onClick={onHandleVote(comment, 'upVote')}>
+                                        <a className="" onClick={this.handleVote('upVote')}>
                                             <i className="thumbs up icon"></i>
                                         </a>
                                     </div>
@@ -55,7 +80,7 @@ class Comment extends Component {
                                 <a className="" onClick={this.handleEdit}>
                                     <i className="edit icon"></i>
                                 </a>
-                                <a className="" onClick={onHandleDelete(comment)}>
+                                <a className="" onClick={this.handleDelete}>
                                     <i className="trash icon"></i>
                                 </a>
                             </div>
@@ -73,4 +98,10 @@ class Comment extends Component {
     }
 }
 
-export default Comment
+function mapStateToProps({comments}, {id}) {
+    return {
+        comment: comments[id]
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(Comment))

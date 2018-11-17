@@ -1,4 +1,5 @@
 import * as API from '../utils/api';
+import {generateUID} from "../utils/helper";
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const VOTE_POST = 'VOTE_POST';
@@ -35,7 +36,8 @@ function countCommentPost(post, value) {
 function addPost(post) {
     post.id = generateUID()
     post.timestamp = new Date().getTime()
-
+    post.commentCount = 0;
+    post.voteScore = 0;
     return {
         type: ADD_POST,
         post
@@ -91,17 +93,15 @@ export function handleCountCommentPost({post, value}) {
     }
 }
 
+export const orderPost = (field,sort) => ({
+    type: ORDER_POST,
+    field,
+    sort
+
+});
+
 export function handleOrderBy(field,sort) {
 
-    return {
-        type: ORDER_POST,
-        field,
-        sort
+    return orderPost(field,sort);
 
-    }
-
-}
-
-function generateUID () {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 }

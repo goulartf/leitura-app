@@ -1,0 +1,22 @@
+{
+  "name": "Application-Leitura-udacity",
+  "version": "0.0.1",
+  "description": "A server and application for the Udacity",
+  "main": "index.js",
+  "keywords": [
+    "udacity",
+    "redux",
+    "readable",
+    "react"
+  ],
+  "author": "Felipe Goulart",
+  "license": "ISC",
+  "scripts": {
+    "start": "concurrently \"npm run startapp\" \"npm run startserver\"",
+    "startserver": "npm start --prefix ./api-server",
+    "startapp": "npm start --prefix ./frontend"
+  },
+  "dependencies": {
+    "concurrently": "^4.0.1"
+  }
+}
